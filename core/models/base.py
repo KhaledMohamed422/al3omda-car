@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator,FileExtensionValidator
 from django.utils.deconstruct import deconstructible
+import uuid
 
 # Abstract base model
 class TimeStampedModel(models.Model):
@@ -42,7 +43,7 @@ class BaseItem(TimeStampedModel):
 
     name = models.CharField(max_length=70,unique=True,help_text="دحل اسم المنتج/العرض",verbose_name="اسم المنتج/العرض")  # Name of the item
     description = models.TextField(help_text="دخل وصف المنتج/العرض",verbose_name="وصف المنتج/العرض")  # Description of the item
-    slug = models.SlugField(unique=True,max_length=70)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     # add new field called tags 
     is_item_active = models.BooleanField(default=True, help_text="هل هذا المنتج/عرض نشط؟ يعني تريد ات يظهر فالصفحة لليوزر",verbose_name="يظهر لليور؟")  # Is this item active?
 
@@ -53,15 +54,14 @@ class BaseItem(TimeStampedModel):
 
 
 @deconstructible
-class UploadToSlugFolder:
+class UploadToUuidFolder:
     def __init__(self, folder_attr):
         self.folder_attr = folder_attr  # e.g. 'product' or 'offer'
 
     def __call__(self, instance, filename):
         related_obj = getattr(instance, self.folder_attr)
-        slug = getattr(related_obj, 'slug', 'unknown')
-        return f"{self.folder_attr}_images/{slug}/{filename}"
-
+        uuid_str = str(getattr(related_obj, 'uuid', 'unknown'))
+        return f"{self.folder_attr}_images/{uuid_str}/{filename}"
 
 class BaseImage(TimeStampedModel):
     image = models.ImageField(upload_to='',validators=[FileExtensionValidator(allowed_extensions=['png', 'jpg', 'jpeg', 'gif'])],help_text="اختر صورة للمنتج")

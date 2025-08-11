@@ -51,8 +51,8 @@ class Order(TimeStampedModel):
 class OrderItem(TimeStampedModel):
 
     order = models.ForeignKey(Order,on_delete=models.CASCADE,related_name="items")
-    product = models.ForeignKey(Product,on_delete=models.PROTECT,null=True, blank=True,related_name="order_items",verbose_name="المنتج اللي العميل طلبه")
-    offer = models.ForeignKey(Offer,on_delete=models.PROTECT,null=True, blank=True,related_name="order_items",verbose_name="العرض اللي العميل  طلبه")
+    product = models.ForeignKey(Product,on_delete=models.CASCADE,null=True, blank=True,related_name="order_items",verbose_name="المنتج اللي العميل طلبه")
+    offer = models.ForeignKey(Offer,on_delete=models.CASCADE,null=True, blank=True,related_name="order_items",verbose_name="العرض اللي العميل  طلبه")
     quantity = models.PositiveIntegerField(default=1,validators=[MinValueValidator(1)],verbose_name="الكمية")
 
     @property

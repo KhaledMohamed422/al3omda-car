@@ -72,7 +72,7 @@ class ProductAdmin(admin.ModelAdmin):
 
     autocomplete_fields = ['categories', 'truck', 'countries']
     readonly_fields = ['market_price']
-    list_display = ['name', 'wholesale_price', 'market_price', 'discount_price', 'is_item_active', 'is_item_new','created_at','updated_at']
+    list_display = ['name', 'wholesale_price', 'market_price', 'discount_price', 'is_item_active', 'is_item_new','uuid','created_at','updated_at']
     list_editable = ['is_item_active', 'is_item_new']
     search_fields = ['name']
     list_filter = ['categories', 'countries', 'truck']

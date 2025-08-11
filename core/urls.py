@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from core.api.shared.views import ProjectInfoRetrieveView
 
 # Swagger
 from rest_framework import permissions
@@ -21,19 +22,25 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path('i18n/', include('django.conf.urls.i18n')),
+    
+   # Project Information API
+   path("", ProjectInfoRetrieveView.as_view(), name="project-info"),
 
-    # App APIs
-    path('api/orders/', include('orders.api.urls')),
-    path('api/cart/', include('session_cart.api.urls')),
-    path('api/products/', include('products.api.urls')),
-    path('api/offers/', include('offers.api.urls')),
-    path('api/shared/', include("core.api.shared.urls")),
+   # Admin URLs 
+   path("admin/", admin.site.urls),
+   path('i18n/', include('django.conf.urls.i18n')),
 
-    # Swagger/OpenAPI Docs
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+   # App APIs
+   path('api/orders/', include('orders.api.urls')),
+   path('api/cart/', include('session_cart.api.urls')),
+   path('api/products/', include('products.api.urls')),
+   path('api/offers/', include('offers.api.urls')),
+   path('api/shared/', include("core.api.shared.urls")),
+   path('api/locations/', include('locations.api.urls')),
+
+   # Swagger/OpenAPI Docs
+   path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+   path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
 
 # Serve media/static in dev

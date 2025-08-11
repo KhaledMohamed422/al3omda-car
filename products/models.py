@@ -1,9 +1,9 @@
 from django.db import models
-from core.models.base import BaseItem , BaseDiscount , BaseImage , UploadToSlugFolder
+from core.models.base import BaseItem , BaseDiscount , BaseImage , UploadToUuidFolder
 from core.models.shared import Category, TruckType, Country
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator,FileExtensionValidator
-
+import math
     
 class Product(BaseItem):
     """
@@ -44,13 +44,13 @@ class Product(BaseItem):
         active_discount = self.discounts.filter(active=True).first()
         if active_discount:
             return active_discount.calculate_discounted_price(self.market_price)
-        return self.market_price
+        return math.ceil(self.market_price)
 
     # Helper method to validate market price increase rate
     def calculate_market_price(self):
         if self.market_price_increase_type == self.PERCENT:
             return int(self.wholesale_price * (1 + self.market_price_increase_rate / 100))
-        return int(self.wholesale_price + self.market_price_increase_rate)
+        return math.ceil(self.wholesale_price + self.market_price_increase_rate)
 
     def save(self, *args, **kwargs):
         self.market_price = self.calculate_market_price()
@@ -83,4 +83,4 @@ class ProductImage(BaseImage):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._meta.get_field('image').upload_to = UploadToSlugFolder('product')
+        self._meta.get_field('image').upload_to = UploadToUuidFolder('product')

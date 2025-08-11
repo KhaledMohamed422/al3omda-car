@@ -6,6 +6,7 @@ from products.models import Product
 from offers.models import Offer
 from locations.models import Governorate, City
 
+
 class OrderAPITestCase(APITestCase):
 
     def setUp(self):
@@ -15,7 +16,6 @@ class OrderAPITestCase(APITestCase):
         self.product = Product.objects.create(
             name="Test Product",
             description="Test Desc",
-            slug="test-product",
             wholesale_price=100,
             market_price_increase_type="fixed",
             market_price_increase_rate=50,
@@ -26,7 +26,6 @@ class OrderAPITestCase(APITestCase):
         self.offer = Offer.objects.create(
             name="Test Offer",
             description="Offer Desc",
-            slug="test-offer",
             price=200,
             is_item_active=True,
         )
@@ -34,14 +33,14 @@ class OrderAPITestCase(APITestCase):
         self.order_payload = {
             "customer_name": "Ahmed",
             "email": "ahmed@example.com",
-            "government": self.gov.id,
+            "government": self.gov.id,  # locations still probably use int PK
             "city": self.city.id,
             "address": "123 Main St",
             "type_deliver": "home",
             "notes": "Please deliver fast",
             "items": [
-                {"product": self.product.id, "quantity": 2},
-                {"offer": self.offer.id, "quantity": 1},
+                {"product": str(self.product.uuid), "quantity": 2},
+                {"offer": str(self.offer.uuid), "quantity": 1},
             ]
         }
 
@@ -62,7 +61,7 @@ class OrderAPITestCase(APITestCase):
     def test_retrieve_order(self):
         self.test_create_order()
         order = Order.objects.first()
-        url = reverse("orders-detail", args=[order.id])
+        url = reverse("orders-detail", args=[order.uuid])
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["customer_name"], "Ahmed")

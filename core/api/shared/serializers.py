@@ -5,23 +5,23 @@ from core.models.project_info import ProjectInfo
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['id', 'name', 'slug']
+        fields = ['name', 'uuid']
 
 
 class TruckTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = TruckType
-        fields = ['id', 'name', 'slug']
+        fields = ['name', 'uuid']
 
 
 class CountrySerializer(serializers.ModelSerializer):
     class Meta:
         model = Country
-        fields = ['id', 'country_name_ar', 'country_name_en', 'slug']
+        fields = ['country_name_ar', 'uuid']
 
 
 class ProjectInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectInfo
         fields = "__all__"
-        read_only_fields = ("id", "created", "modified")
+        read_only_fields = ("created", "modified")

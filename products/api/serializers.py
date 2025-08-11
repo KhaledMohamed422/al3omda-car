@@ -16,6 +16,11 @@ class ProductDiscountSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name='product-detail',  # name from your urls/router
+        lookup_field='uuid'          # tell DRF to use uuid instead of pk
+    )
+
     categories = serializers.StringRelatedField(many=True)
     countries = serializers.StringRelatedField(many=True)
     truck = serializers.StringRelatedField(many=True)
@@ -25,7 +30,5 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = [
-            'id', 'name', 'description', 'slug', 'is_item_active', 'is_item_new',
-            'wholesale_price', 'market_price_increase_type', 'market_price_increase_rate',
-            'market_price', 'final_price', 'categories', 'countries', 'truck', 'images'
+            'url','name', 'description', 'uuid','market_price', 'final_price', 'categories', 'countries', 'truck', 'images'
         ]

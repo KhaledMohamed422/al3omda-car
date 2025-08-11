@@ -1,12 +1,14 @@
-from rest_framework.routers import DefaultRouter
-from .views import CategoryViewSet, TruckTypeViewSet, CountryViewSet, ProjectInfoRetrieveUpdateView
 from django.urls import path
+from .views import (
+    CategoryListView,
+    TruckTypeListView,
+    CountryListView,
+    ProjectInfoRetrieveView
+)
 
-router = DefaultRouter()
-router.register(r'categories', CategoryViewSet)
-router.register(r'trucks', TruckTypeViewSet)
-router.register(r'countries', CountryViewSet)
-
-urlpatterns = router.urls + [
-    path("project-info/", ProjectInfoRetrieveUpdateView.as_view(), name="project-info"),
+urlpatterns = [
+    path("categories/", CategoryListView.as_view(), name="categories"),
+    path("truck-types/", TruckTypeListView.as_view(), name="truck-types"),
+    path("countries/", CountryListView.as_view(), name="countries"),
+    path("project-info/", ProjectInfoRetrieveView.as_view(), name="project-info"),
 ]

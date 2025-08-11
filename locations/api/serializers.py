@@ -5,7 +5,7 @@ from locations.models import Governorate, City
 class CitySerializer(serializers.ModelSerializer):
     class Meta:
         model = City
-        fields = ['id', 'city_name_ar', 'city_name_en', 'governorate']
+        fields = ['city_name_ar', 'governorate']
 
 
 class GovernorateSerializer(serializers.ModelSerializer):
@@ -13,4 +13,4 @@ class GovernorateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Governorate
-        fields = ['id', 'governorate_name_ar', 'governorate_name_en', 'cities']
+        fields = ['id', 'governorate_name_ar', 'cities']

@@ -1,30 +1,48 @@
-from rest_framework import viewsets
+from rest_framework import generics
 from core.models.shared import Category, TruckType, Country
-from .serializers import CategorySerializer, TruckTypeSerializer, CountrySerializer
+from core.models.project_info import ProjectInfo
+from .serializers import (
+    CategorySerializer,
+    TruckTypeSerializer,
+    CountrySerializer,
+    ProjectInfoSerializer,
+)
 
-
-class CategoryViewSet(viewsets.ModelViewSet):
+# ------------------------------------------------------------------------------
+# Shared Data (List-Only Views)
+# ------------------------------------------------------------------------------
+class CategoryListView(generics.ListAPIView):
+    """
+    GET only: returns all categories.
+    """
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
 
-class TruckTypeViewSet(viewsets.ModelViewSet):
+class TruckTypeListView(generics.ListAPIView):
+    """
+    GET only: returns all truck types.
+    """
     queryset = TruckType.objects.all()
     serializer_class = TruckTypeSerializer
 
 
-class CountryViewSet(viewsets.ModelViewSet):
+class CountryListView(generics.ListAPIView):
+    """
+    GET only: returns all countries.
+    """
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
 
 
-from rest_framework import generics
-from core.models.project_info import ProjectInfo
-from .serializers import ProjectInfoSerializer
-
-class ProjectInfoRetrieveUpdateView(generics.RetrieveUpdateAPIView):
+# ------------------------------------------------------------------------------
+# Project Information
+# ------------------------------------------------------------------------------
+class ProjectInfoRetrieveView(generics.RetrieveAPIView):
+    """
+    Retrieve the single ProjectInfo instance (singleton pattern).
+    """
     serializer_class = ProjectInfoSerializer
 
     def get_object(self):
-        return ProjectInfo.objects.first()  # Always return the singleton instance
-
+        return ProjectInfo.objects.first()
